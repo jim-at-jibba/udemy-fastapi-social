@@ -1,4 +1,5 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from functools import lru_cache
 from typing import Optional
 
 
@@ -27,3 +28,16 @@ class TestConfig(GlobalConfig):
     DATABASE_URL: Optional[str] = "sqlite:///test.db"
     DB_FORCE_ROLL_BACK: bool = True
     model_config = SettingsConfigDict(env_prefix="TEST_")
+
+
+@lru_cache()
+def get_config(env_state: str | None):
+    # This should only be run once and so should not change
+    configs = {"dev": DevConfig, "prod": ProdConfig, "test": TestConfig}
+    if env_state is not None:
+        return configs[env_state]
+    else:
+        raise ValueError(f"Invalid env_state value: {env_state}")
+
+
+config = get_config(BaseConfig().ENV_STATE)
