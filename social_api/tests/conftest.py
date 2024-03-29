@@ -1,11 +1,14 @@
 from typing import AsyncGenerator, Generator
 
+import os
 import pytest
 from fastapi.testclient import TestClient
 from httpx import AsyncClient
-
-from social_api.main import app
 from social_api.routers.post import comment_table, post_table
+
+os.environ["ENV_STATE"] = "test"
+
+from social_api.main import app  # noqa: E402
 
 
 # scope="session" means this will only run once
