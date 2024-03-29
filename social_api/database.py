@@ -1,9 +1,9 @@
 import databases
 import sqlalchemy
-from config import config
+from social_api.config import config
 
 metatdata = sqlalchemy.MetaData()
-
+print("WHATJ", config.DATABASE_URL)
 posts = sqlalchemy.Table(
     "posts",
     metatdata,

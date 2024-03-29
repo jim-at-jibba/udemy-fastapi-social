@@ -35,7 +35,8 @@ def get_config(env_state: str | None):
     # This should only be run once and so should not change
     configs = {"dev": DevConfig, "prod": ProdConfig, "test": TestConfig}
     if env_state is not None:
-        return configs[env_state]
+        print(f"env_state: {env_state}, {configs[env_state]}")
+        return configs[env_state]()
     else:
         raise ValueError(f"Invalid env_state value: {env_state}")
 
