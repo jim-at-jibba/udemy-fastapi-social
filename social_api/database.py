@@ -3,15 +3,14 @@ import sqlalchemy
 from social_api.config import config
 
 metatdata = sqlalchemy.MetaData()
-print("WHATJ", config.DATABASE_URL)
-posts = sqlalchemy.Table(
+post_table = sqlalchemy.Table(
     "posts",
     metatdata,
     sqlalchemy.Column("id", sqlalchemy.Integer, primary_key=True),
     sqlalchemy.Column("body", sqlalchemy.String),
 )
 
-comments = sqlalchemy.Table(
+comment_table = sqlalchemy.Table(
     "comments",
     metatdata,
     sqlalchemy.Column("id", sqlalchemy.Integer, primary_key=True),

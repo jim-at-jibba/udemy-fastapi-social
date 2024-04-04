@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 # BaseModel allows us to validate our request
 
 
@@ -7,6 +7,9 @@ class UserPostIn(BaseModel):
 
 
 class UserPost(UserPostIn):
+    # this tells pydantic to treat model as row or dict
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
 
 
@@ -16,6 +19,9 @@ class CommentIn(BaseModel):
 
 
 class Comment(CommentIn):
+    # this tells pydantic to treat model as row or dict
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
 
 
