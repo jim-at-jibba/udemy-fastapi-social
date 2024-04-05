@@ -2,9 +2,11 @@ import logging
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 from fastapi.exception_handlers import http_exception_handler
+from asgi_correlation_id import CorrelationIdMiddleware
 from social_api.routers.post import router as post_router
 from social_api.database import database
 from social_api.logging_conf import configure_logging
+
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +22,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
-
+app.add_middleware(CorrelationIdMiddleware)
 
 # app.include_router(post_router, prefix="posts")
 app.include_router(post_router)
