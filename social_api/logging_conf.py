@@ -4,6 +4,11 @@ from logging.config import dictConfig
 from social_api.config import DevConfig, config
 
 
+handlers = ["default", "rotating_file", "logtail"]
+if isinstance(config, DevConfig):
+    handlers = ["default", "rotating_file"]
+
+
 def obfuscated(email: str, obfuscated_length: int) -> str:
     characters = email[:obfuscated_length]
     first, last = email.split("@")
@@ -73,6 +78,13 @@ def configure_logging() -> None:
                     "encoding": "utf8",
                     "filters": ["correlation_id", "email_obfuscation"],
                 },
+                "logtail": {
+                    "class": "logtail.LogtailHandler",
+                    "level": "DEBUG",
+                    "formatter": "console",
+                    "filters": ["correlation_id", "email_obfuscation"],
+                    "source_token": config.LOGTAIL_API_KEY,
+                },
             },
             "loggers": {
                 "uvicorn": {
@@ -80,7 +92,7 @@ def configure_logging() -> None:
                     "level": "INFO",
                 },
                 "social_api": {
-                    "handlers": ["default", "rotating_file"],
+                    "handlers": handlers,
                     "level": "DEBUG" if isinstance(config, DevConfig) else "INFO",
                     "propagate": False,
                 },
