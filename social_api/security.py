@@ -2,6 +2,7 @@ import datetime
 import logging
 
 from fastapi import HTTPException, status
+from fastapi.security import OAuth2PasswordBearer, oauth2
 from passlib.context import CryptContext
 from jose import jwt, ExpiredSignatureError, JWTError
 from sqlalchemy import except_
@@ -11,6 +12,8 @@ from social_api.database import database, user_table
 logger = logging.getLogger(__name__)
 SECRET_KEY = "afc70ec34c8142a8b772470ccef74de29f31b5386a2f70b40c6ad83906e18eb2"
 ALGORITHM = "HS256"
+# TokenUrl is the endpoint the user can login with
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 pwd_context = CryptContext(schemes=["bcrypt"])
 
 credentials_exception = HTTPException(
