@@ -7,7 +7,9 @@ from social_api import security
 
 
 async def create_post(
-    body: str, async_client: AsyncClient, logged_in_token: str
+    body: str,
+    async_client: AsyncClient,
+    logged_in_token: str,
 ) -> dict:
     # by calling json= we let python set our headers etc for us
     response = await async_client.post(
@@ -46,12 +48,14 @@ async def created_comment(
 
 
 @pytest.mark.anyio
-async def test_create_post(async_client: AsyncClient, logged_in_token: str):
+async def test_create_post(
+    async_client: AsyncClient, logged_in_token: str, registered_user: dict
+):
     body = "Test post"
 
     response = await async_client.post(
         "/post",
-        json={"body": body},
+        json={"body": body, "user_id": registered_user["id"]},
         headers={"Authorization": f"Bearer {logged_in_token}"},
     )
 
@@ -100,13 +104,20 @@ async def test_get_all_posts(async_client: AsyncClient, created_post: dict):
 
 @pytest.mark.anyio
 async def test_create_comment(
-    async_client: AsyncClient, created_post: dict, logged_in_token: str
+    async_client: AsyncClient,
+    created_post: dict,
+    logged_in_token: str,
+    registered_user: dict,
 ):
     body = "Test Comment"
 
     response = await async_client.post(
         "/comment",
-        json={"body": body, "post_id": created_post["id"]},
+        json={
+            "body": body,
+            "post_id": created_post["id"],
+            "user_id": registered_user["id"],
+        },
         headers={"Authorization": f"Bearer {logged_in_token}"},
     )
 
