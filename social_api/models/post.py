@@ -7,11 +7,17 @@ class UserPostIn(BaseModel):
 
 
 class UserPost(UserPostIn):
-    # this tells pydantic to treat model as row or dict
+    # this tells pydantic to treat model as row or dict, replaces orm_mode=True
     model_config = ConfigDict(from_attributes=True)
 
     id: int
     user_id: int
+
+
+class UserPostWithLikes(UserPost):
+    model_config = ConfigDict(from_attributes=True)
+
+    likes: int
 
 
 class CommentIn(BaseModel):
@@ -28,7 +34,7 @@ class Comment(CommentIn):
 
 
 class UserPostWithComments(BaseModel):
-    post: UserPost
+    post: UserPostWithLikes
     comments: list[Comment]
 
 
